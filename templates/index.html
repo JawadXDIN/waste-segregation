@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Waste Segregation</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="bg bg1"></div>
+<div class="bg bg2"></div>
+<div class="grid-overlay"></div>
+
+<div class="wrapper">
+
+  <header>
+    <div>
+      <h1>♻ AI Waste Segregation</h1>
+      <p>YOLOv11 • Computer Vision • Smart Recycling</p>
+    </div>
+
+    <div class="live">
+      <span></span> LIVE
+    </div>
+  </header>
+
+  <main>
+
+    <section class="camera-card glass">
+
+      <div class="topbar">
+        <div class="pill">CAMERA FEED</div>
+        <div class="pulse"></div>
+      </div>
+
+      <img src="/video" class="camera"/>
+
+      <div class="scan"></div>
+
+    </section>
+
+    <aside>
+
+      <div class="glass info">
+        <small>Detected Object</small>
+        <h2 id="obj-name">Scanning...</h2>
+      </div>
+
+      <div class="glass info">
+        <small>Material</small>
+        <h2 id="obj-material">Waiting...</h2>
+      </div>
+
+      <div class="glass info green">
+        <small>Recommended Bin</small>
+        <h2 id="obj-bin">Waiting...</h2>
+      </div>
+
+      <div class="glass info">
+        <small>Confidence</small>
+        <h3 id="obj-conf">0.0%</h3>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <footer>
+
+    <div class="glass stat">
+      <h3>AI STATUS</h3>
+      <p>RUNNING</p>
+    </div>
+
+    <div class="glass stat">
+      <h3>FPS</h3>
+      <p>Realtime</p>
+    </div>
+
+    <div class="glass stat">
+      <h3>Classes</h3>
+      <p>35 Items</p>
+    </div>
+
+    <div class="glass stat">
+      <h3>Accuracy</h3>
+      <p>YOLO-World AI</p>
+    </div>
+
+  </footer>
+
+</div>
+
+<script>
+  function fetchStatus() {
+    fetch('/status')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('obj-name').innerText = data.object_name;
+        document.getElementById('obj-material').innerText = data.material;
+        document.getElementById('obj-bin').innerText = data.bin;
+        document.getElementById('obj-conf').innerText = data.confidence + '%';
+        
+        // Dynamic bin color
+        let binEl = document.getElementById('obj-bin').parentElement;
+        if (data.bin.includes('WET')) {
+            binEl.style.color = '#00ff9d';
+            binEl.style.textShadow = '0 0 14px #00ff9d';
+        } else if (data.bin.includes('DRY')) {
+            binEl.style.color = '#ffaa00';
+            binEl.style.textShadow = '0 0 14px #ffaa00';
+        } else if (data.bin.includes('E-WASTE')) {
+            binEl.style.color = '#ff3366';
+            binEl.style.textShadow = '0 0 14px #ff3366';
+        } else if (data.bin.includes('HAZARDOUS')) {
+            binEl.style.color = '#ff0000';
+            binEl.style.textShadow = '0 0 20px #ff0000';
+        } else {
+            binEl.style.color = 'white';
+            binEl.style.textShadow = 'none';
+        }
+      })
+      .catch(err => console.error(err));
+  }
+  
+  // Poll every 100ms for hyper responsiveness
+  setInterval(fetchStatus, 100);
+</script>
+
+
+
+</div>
+
+</body>
+</html>

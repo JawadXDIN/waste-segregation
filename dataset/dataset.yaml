@@ -1,0 +1,13 @@
+path: dataset
+train: images/train
+val: images/val
+
+names:
+  0: plastic_bottle
+  1: pen
+  2: pencil
+  3: cardboard
+  4: paper
+  5: metal
+  6: glass
+  7: biodegradable
